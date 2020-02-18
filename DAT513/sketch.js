@@ -168,11 +168,11 @@ function draw() {
 
     
       for(let i = 0; i < polyAmount; i++){
-        bearing[i] = turf.bearing(mousePoint, center[i]);
+        bearing[i] = turf.bearing(userPoint, center[i]);
         //console.log('b'+[i]+' : '+ bearing[i])
-         mouseChecker[i] = turf.pointsWithinPolygon(mousePoint, poly[i]);
+         mouseChecker[i] = turf.pointsWithinPolygon(userPoint, poly[i]);
               var options = {units: 'meters'};
-        distanceFromCenter[i] = turf.distance(mousePoint, center[i], options);
+        distanceFromCenter[i] = turf.distance(userPoint, center[i], options);
       if(startRoute == true && routes == 1){
         if(distanceFromCenter[i] > 900 || entered[i] == true)
         {
@@ -193,19 +193,19 @@ function draw() {
           
           
           if(poly[i].features[0].danger == 1){
-            pointDistance[i] = turf.distance(entryPoint, mousePoint, options)
+            pointDistance[i] = turf.distance(entryPoint, userPoint, options)
           }
           
           else if(poly[i].features[0].danger == 2){
-            pointDistance[i] = turf.distance(entryPoint, mousePoint, options) * 2
+            pointDistance[i] = turf.distance(entryPoint, userPoint, options) * 2
           }
 
           else if(poly[i].features[0].danger == 3){
-            pointDistance[i] = turf.distance(entryPoint, mousePoint, options) * 3
+            pointDistance[i] = turf.distance(entryPoint, userPoint, options) * 3
           }
           
           else if(poly[i].features[0].danger == 5){
-            pointDistance[i] = turf.distance(entryPoint, mousePoint, options) * 5
+            pointDistance[i] = turf.distance(entryPoint, userPoint, options) * 5
           }
           
         }
