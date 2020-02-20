@@ -20,7 +20,7 @@ var routes = 0;
 var startRoute = false;
 var endRoute = false;
 var gotPosition = false;
-
+var gotBearing = false;
 
 // Create a variable to hold our map
 let myMap;
@@ -74,6 +74,26 @@ function setup(){
     });
   }
  
+         // feature detect
+   if (typeof DeviceOrientationEvent.requestPermission === 'function') {
+    DeviceOrientationEvent.requestPermission()
+      .then(permissionState => {
+        if (permissionState === 'granted') {
+          window.addEventListener('deviceorientation', (e) => {
+              compassHeading = e.webkitCompassHeading;
+              gotBearing = true;
+
+          });
+        }
+      })
+      .catch(console.error);
+    } else {
+      // handle regular non iOS 13+ devices
+      window.addEventListener('deviceorientation', (e) => {
+      compassHeading = e.webkitCompassHeading;
+      gotBearing = true;
+    });
+  }
   
   rectMode(CENTER);
   textAlign(CENTER, CENTER);
@@ -81,7 +101,7 @@ function setup(){
 }
 
 function gotPos(e){
-    gotPosition = true;
+  gotPosition = true;
    console.log('success');  
    console.log(e.coords.latitude);
    console.log(e.coords.longitude);
@@ -96,15 +116,13 @@ function gotPos(e){
   //if usermarker is not undefined
   if(!userMarker){
     //set usermarker varibale as the marker itself
-  userMarker = L.circleMarker([e.coords.latitude,         e.coords.longitude]).addTo(myMap.map);
+  userMarker = L.circleMarker([e.coords.latitude, e.coords.longitude]).addTo(myMap.map);
   }
-  //sles move latLng of marker for every new position
+  //sles  move latLng of marker for every new position
   else{
     userMarker.setLatLng([e.coords.latitude, e.coords.longitude]);
   }
-  
   userLatLng = userMarker.getLatLng();
-  
 }
 
 
@@ -166,7 +184,7 @@ function draw() {
     var distanceFromCenter = [];
     var circleSize = [];
 
-    
+    if(userPoint != undefined){    
       for(let i = 0; i < polyAmount; i++){
         bearing[i] = turf.bearing(userPoint, center[i]);
         //console.log('b'+[i]+' : '+ bearing[i])
@@ -226,10 +244,10 @@ function draw() {
           textSize(10);
           text("your total is: " + total, 400, 100);
         }
-    }
+      }
+  }  
     
     if(gotPosition == true){
-
       noStroke();
       var v1 = createVector(0, -50);
 
@@ -278,25 +296,6 @@ function mousePressed() {
   else if(routes == 1){
     endRoute = true;
     routes = 0;
-  }
-
-  
-  // feature detect
-  if (typeof DeviceOrientationEvent.requestPermission === 'function') {
-    DeviceOrientationEvent.requestPermission()
-      .then(permissionState => {
-        if (permissionState === 'granted') {
-          window.addEventListener('deviceorientation', (e) => {
-              compassHeading = e.webkitCompassHeading;
-          });
-        }
-      })
-      .catch(console.error);
-    } else {
-      // handle regular non iOS 13+ devices
-      window.addEventListener('deviceorientation', (e) => {
-      compassHeading = e.webkitCompassHeading;
-    });
   }
 }
 
