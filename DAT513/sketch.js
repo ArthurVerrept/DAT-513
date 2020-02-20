@@ -88,7 +88,7 @@ function gotPos(e){
   
   userPoint = turf.point([e.coords.longitude, e.coords.latitude]);
   userPixel = myMap.latLngToPixel(e.coords.latitude,e.coords.longitude);
-  ellipse(userPixel.x, userPixel.y, 20);
+  //ellipse(userPixel.x, userPixel.y, 20);
   
   //if map has not loaded, jump back out of function
   if (!mapLoaded) return;
